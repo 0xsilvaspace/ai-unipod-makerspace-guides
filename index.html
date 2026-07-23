@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>3D Printer (FDM) Operating Guide — AI UniPod Makerspace</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --navy:#1F2A44;
+    --navy-deep:#141C30;
+    --charcoal:#333333;
+    --aqua:#2AA9A0;
+    --aqua-soft:#E4F5F3;
+    --amber:#C97A2E;
+    --amber-soft:#FBF0E2;
+    --bg:#F7F8FA;
+    --white:#FFFFFF;
+    --line:#E1E4E8;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    background:var(--bg);
+    color:var(--charcoal);
+    font-family:'Inter',sans-serif;
+    line-height:1.55;
+  }
+  .wrap{max-width:720px;margin:0 auto;padding:0 20px 60px;}
+
+  header.hero{
+    background:linear-gradient(155deg,var(--navy) 0%,var(--navy-deep) 100%);
+    color:var(--white);
+    padding:36px 20px 32px;
+  }
+  .hero-inner{max-width:720px;margin:0 auto;}
+  .logo-slot{
+    display:inline-flex;align-items:center;gap:10px;
+    font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.12em;
+    color:var(--aqua);text-transform:uppercase;margin-bottom:18px;
+  }
+  .logo-box{
+    width:28px;height:28px;border:1px dashed rgba(255,255,255,.5);border-radius:6px;
+    display:flex;align-items:center;justify-content:center;font-size:9px;color:rgba(255,255,255,.6);
+  }
+  h1{
+    font-family:'Space Grotesk',sans-serif;
+    font-size:clamp(26px,6vw,34px);
+    font-weight:700;
+    margin:0 0 10px;
+    line-height:1.15;
+  }
+  .hero-sub{color:#C7D0E0;font-size:15px;margin:0 0 4px;}
+  .chip-row{display:flex;flex-wrap:wrap;gap:8px;margin-top:16px;}
+  .chip{
+    font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.03em;
+    background:rgba(42,169,160,.16);color:var(--aqua);
+    border:1px solid rgba(42,169,160,.4);
+    padding:5px 10px;border-radius:100px;
+  }
+
+  section{margin-top:28px;}
+  .card{
+    background:var(--white);
+    border:1px solid var(--line);
+    border-radius:12px;
+    padding:20px 22px;
+  }
+  .eyebrow{
+    font-family:'IBM Plex Mono',monospace;
+    font-size:11px;letter-spacing:.1em;text-transform:uppercase;
+    color:var(--navy);opacity:.65;margin:0 0 8px;
+  }
+  h2{
+    font-family:'Space Grotesk',sans-serif;
+    font-size:19px;margin:0 0 12px;color:var(--navy);
+  }
+
+  .safety{border-left:4px solid var(--amber);background:var(--amber-soft);}
+  .safety h2{color:#8A5320;}
+  .safety ul{margin:0;padding-left:20px;}
+  .safety li{margin-bottom:8px;}
+
+  .checklist{border-left:4px solid var(--aqua);}
+  .check-item{
+    display:flex;align-items:flex-start;gap:10px;margin-bottom:10px;cursor:pointer;
+    font-size:15px;
+  }
+  .check-item:last-child{margin-bottom:0;}
+  .box{
+    width:18px;height:18px;min-width:18px;border:2px solid var(--navy);border-radius:4px;margin-top:2px;
+    display:flex;align-items:center;justify-content:center;transition:background .15s,border-color .15s;
+  }
+  .check-item.done .box{background:var(--aqua);border-color:var(--aqua);}
+  .check-item.done .box:after{content:"✓";color:white;font-size:12px;}
+  .check-item.done span.label{color:#8a8a8a;text-decoration:line-through;}
+
+  .phase{margin-bottom:18px;}
+  .phase:last-child{margin-bottom:0;}
+  .phase-head{display:flex;align-items:center;gap:12px;margin-bottom:10px;}
+  .phase-badge{
+    width:32px;height:32px;min-width:32px;border-radius:8px;background:var(--navy);color:var(--white);
+    font-family:'IBM Plex Mono',monospace;font-weight:600;font-size:13px;
+    display:flex;align-items:center;justify-content:center;
+  }
+  .phase-title{font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:16px;color:var(--navy);}
+  .steps{list-style:none;margin:0;padding:0;}
+  .step{display:flex;gap:12px;margin-bottom:10px;padding-left:44px;position:relative;font-size:15px;}
+  .step:last-child{margin-bottom:0;}
+  .step .num{
+    position:absolute;left:0;top:1px;
+    width:26px;height:26px;border-radius:50%;background:var(--aqua-soft);color:var(--navy);
+    font-family:'IBM Plex Mono',monospace;font-size:12px;font-weight:600;
+    display:flex;align-items:center;justify-content:center;
+  }
+
+  .ts-row{padding:14px 0;border-bottom:1px solid var(--line);}
+  .ts-row:last-child{border-bottom:none;padding-bottom:0;}
+  .ts-row:first-child{padding-top:0;}
+  .ts-label{
+    font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.08em;
+    color:var(--amber);text-transform:uppercase;margin-bottom:4px;
+  }
+  .ts-issue{font-weight:600;color:var(--navy);margin-bottom:4px;}
+  .ts-fix-label{
+    font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.08em;
+    color:var(--aqua);text-transform:uppercase;margin:8px 0 4px;
+  }
+
+  .help-box{
+    border:1px dashed #B8BEC9;background:transparent;border-radius:12px;padding:18px 20px;
+    font-style:italic;color:#6b6f76;font-size:14px;
+  }
+
+  footer{
+    margin-top:40px;padding-top:20px;border-top:1px solid var(--line);
+    text-align:center;
+  }
+  footer p{
+    font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.06em;
+    color:#8a8f98;text-transform:uppercase;margin:0;
+  }
+
+  @media (max-width:480px){
+    .card{padding:16px 16px;}
+    header.hero{padding:28px 16px 26px;}
+  }
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="hero-inner">
+    <div class="logo-slot"><span class="logo-box">UP</span> AI UniPod Makerspace Guide Series · No. 01</div>
+    <h1>3D Printer (FDM)<br>Operating Guide</h1>
+    <p class="hero-sub">Reference machine: Creality K1C</p>
+    <div class="chip-row">
+      <span class="chip">APPLIES TO ANY FDM PRINTER</span>
+      <span class="chip">10 PHASES · 34 STEPS</span>
+    </div>
+  </div>
+</header>
+
+<div class="wrap">
+
+  <section class="card">
+    <p class="eyebrow">Overview</p>
+    <h2>What This Machine Does</h2>
+    <p style="margin:0;">This is a filament-based (FDM) 3D printer. It builds parts layer by layer by melting plastic filament and depositing it according to a digital 3D model. Used for prototypes, brackets, enclosures, replacement parts, and functional test pieces.</p>
+  </section>
+
+  <section class="card safety">
+    <h2>⚠ Safety First</h2>
+    <ul>
+      <li>No loose sleeves, hair, or jewelry near the print chamber while the machine is running.</li>
+      <li>The nozzle can reach up to 300°C and the bed up to around 110°C. Never touch either during or immediately after a print.</li>
+      <li>Keep hands out of the chamber while the gantry is moving.</li>
+      <li>If printing ABS or ASA, make sure the room has ventilation, since fumes build up in enclosed spaces.</li>
+      <li>Do not force the enclosure door while a print is active.</li>
+    </ul>
+  </section>
+
+  <section class="card checklist">
+    <h2>Before You Start</h2>
+    <div id="checklist">
+      <div class="check-item" data-i="1"><div class="box"></div><span class="label">Your 3D model design is finalized, no more changes needed</span></div>
+      <div class="check-item" data-i="2"><div class="box"></div><span class="label">You have a sliced file (.gcode) ready, or the raw model (.STL/.STEP) if slicing on-site</span></div>
+      <div class="check-item" data-i="3"><div class="box"></div><span class="label">You know the filament type and color you need</span></div>
+      <div class="check-item" data-i="4"><div class="box"></div><span class="label">The machine is free (check the booking/sign-up sheet if one exists)</span></div>
+      <div class="check-item" data-i="5"><div class="box"></div><span class="label">The build plate is clean</span></div>
+    </div>
+  </section>
+
+  <section>
+    <p class="eyebrow" style="margin-left:4px;">Step-by-Step Guide</p>
+
+    <div class="card">
+      <div class="phase">
+        <div class="phase-head"><div class="phase-badge">01</div><div class="phase-title">Finalize Your Design</div></div>
+        <ul class="steps">
+          <li class="step"><span class="num">1</span>Complete your 3D model in your CAD software of choice (Fusion 360, Onshape, Tinkercad, etc.)</li>
+          <li class="step"><span class="num">2</span>Check for common issues before exporting: unsupported overhangs, walls thinner than 0.8mm, and non-manifold geometry.</li>
+          <li class="step"><span class="num">3</span>Export the model as an STL or STEP file.</li>
+          <li class="step"><span class="num">4</span>Finalize the design before bringing it to the printer. Editing mid-session wastes machine time and slicing effort.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="card" style="margin-top:14px;">
+      <div class="phase">
+        <div class="phase-head"><div class="phase-badge">02</div><div class="phase-title">Slice the File</div></div>
+        <ul class="steps">
+          <li class="step"><span class="num">5</span>Open the slicer software set up at the station (Creality Print, Cura, or Bambu Studio, depending on the machine).</li>
+          <li class="step"><span class="num">6</span>Import your STL/STEP file.</li>
+          <li class="step"><span class="num">7</span>Select the correct printer profile for this machine.</li>
+          <li class="step"><span class="num">8</span>Set the material type to match your filament (PLA, PETG, ABS, etc.)</li>
+          <li class="step"><span class="num">9</span>Adjust supports, infill, and layer height for your part.</li>
+          <li class="step"><span class="num">10</span>Slice the file and save the resulting .gcode.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="card" style="margin-top:14px;">
+      <div class="phase">
+        <div class="phase-head"><div class="phase-badge">03</div><div class="phase-title">Prepare the Machine</div></div>
+        <ul class="steps">
+          <li class="step"><span class="num">11</span>Power on the printer using the switch at the back or side.</li>
+          <li class="step"><span class="num">12</span>Check that the nozzle and bed are clean, with no leftover filament blobs or debris.</li>
+          <li class="step"><span class="num">13</span>Confirm the correct filament is already loaded, or move to Phase 4 to change it.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="card" style="margin-top:14px;">
+      <div class="phase">
+        <div class="phase-head"><div class="phase-badge">04</div><div class="phase-title">Load or Change Filament</div></div>
+        <ul class="steps">
+          <li class="step"><span class="num">14</span>From the touchscreen, open the filament/extruder menu.</li>
+          <li class="step"><span class="num">15</span>To remove old filament, select "Unload" and wait for the nozzle to heat and release it.</li>
+          <li class="step"><span class="num">16</span>Feed the new filament through the tube until it engages the extruder gear.</li>
+          <li class="step"><span class="num">17</span>Select "Load" and wait until filament extrudes cleanly and consistently from the nozzle.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="card" style="margin-top:14px;">
+      <div class="phase">
+        <div class="phase-head"><div class="phase-badge">05</div><div class="phase-title">Level the Bed</div></div>
+        <ul class="steps">
+          <li class="step"><span class="num">18</span>Run the auto bed-leveling routine from the touchscreen (most machines run this automatically before each print, but you can trigger it manually if prints are failing to stick).</li>
+          <li class="step"><span class="num">19</span>Wait for the process to finish before starting your print.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="card" style="margin-top:14px;">
+      <div class="phase">
+        <div class="phase-head"><div class="phase-badge">06</div><div class="phase-title">Send and Start the Print</div></div>
+        <p style="margin:0 0 10px;font-size:14px;color:#666;">Use whichever method is set up at this station:</p>
+        <ul class="steps">
+          <li class="step"><span class="num">20</span><b>WiFi/App:</b>&nbsp;Connect the app to the assigned printer and upload the .gcode file to start.</li>
+          <li class="step"><span class="num">21</span><b>USB stick:</b>&nbsp;Insert the drive with the .gcode file, select it on the touchscreen, and press start.</li>
+          <li class="step"><span class="num">22</span><b>Direct USB cable:</b>&nbsp;Connect to the linked computer and start the print through its control software.</li>
+          <li class="step"><span class="num">23</span>Before pressing start, confirm the bed is clear and the enclosure is closed.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="card" style="margin-top:14px;">
+      <div class="phase">
+        <div class="phase-head"><div class="phase-badge">07</div><div class="phase-title">Monitor the Print</div></div>
+        <ul class="steps">
+          <li class="step"><span class="num">24</span>Watch the first layer closely. Most failures show up here (poor adhesion, shifting, stringing).</li>
+          <li class="step"><span class="num">25</span>If the print detaches or fails badly, stop it immediately from the touchscreen rather than letting it run to the end.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="card" style="margin-top:14px;">
+      <div class="phase">
+        <div class="phase-head"><div class="phase-badge">08</div><div class="phase-title">Remove the Finished Print</div></div>
+        <ul class="steps">
+          <li class="step"><span class="num">26</span>Let the bed cool first if instructed, some plates release parts more cleanly once cool.</li>
+          <li class="step"><span class="num">27</span>Gently flex the removable plate, or use the supplied scraper, to release the part.</li>
+          <li class="step"><span class="num">28</span>Do not force it. If a part is stuck, ask a lab assistant rather than risk damaging the plate.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="card" style="margin-top:14px;">
+      <div class="phase">
+        <div class="phase-head"><div class="phase-badge">09</div><div class="phase-title">Post-Processing (If Needed)</div></div>
+        <ul class="steps">
+          <li class="step"><span class="num">29</span>Remove support material carefully with flush cutters or pliers.</li>
+          <li class="step"><span class="num">30</span>Sand or clean up rough edges if needed.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="card" style="margin-top:14px;">
+      <div class="phase">
+        <div class="phase-head"><div class="phase-badge">10</div><div class="phase-title">Shutdown and Cleanup</div></div>
+        <ul class="steps">
+          <li class="step"><span class="num">31</span>Clear any leftover filament scraps from the bed.</li>
+          <li class="step"><span class="num">32</span>Power off the machine if you're the last person using it for the day.</li>
+          <li class="step"><span class="num">33</span>Return tools (scraper, cutters) to their designated spot.</li>
+          <li class="step"><span class="num">34</span>Log your print in the usage sheet if one exists.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section class="card">
+    <p class="eyebrow">Reference</p>
+    <h2>Troubleshooting Quick Reference</h2>
+
+    <div class="ts-row">
+      <p class="ts-issue">Stringing between parts</p>
+      <p class="ts-fix-label">Fix</p>
+      <p style="margin:0;">Lower nozzle temp slightly, or adjust retraction settings in the slicer.</p>
+    </div>
+    <div class="ts-row">
+      <p class="ts-issue">Print won't stick to the bed</p>
+      <p class="ts-fix-label">Fix</p>
+      <p style="margin:0;">Re-level the bed, clean the plate with isopropyl alcohol.</p>
+    </div>
+    <div class="ts-row">
+      <p class="ts-issue">Nozzle clogged / no filament flow</p>
+      <p class="ts-fix-label">Fix</p>
+      <p style="margin:0;">Run the machine's built-in unclog routine, or notify a lab assistant.</p>
+    </div>
+    <div class="ts-row">
+      <p class="ts-issue">Layers shifting mid-print</p>
+      <p class="ts-fix-label">Fix</p>
+      <p style="margin:0;">Check nothing is obstructing the gantry rods, notify a lab assistant if it persists.</p>
+    </div>
+  </section>
+
+  <section>
+    <p class="eyebrow" style="margin-left:4px;">Support</p>
+    <div class="help-box">
+      [PLACEHOLDER: add contact name/role here, e.g. "Ask the lab assistant on duty" or a direct contact]
+    </div>
+  </section>
+
+  <footer>
+    <p>AI UniPod Makerspace — Step-by-Step Machine Guides</p>
+  </footer>
+
+</div>
+
+<script>
+  document.querySelectorAll('.check-item').forEach(function(item){
+    item.addEventListener('click', function(){
+      item.classList.toggle('done');
+    });
+  });
+</script>
+
+</body>
+</html>
